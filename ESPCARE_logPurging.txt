@@ -1,0 +1,22 @@
+#***********************************************************************
+#*This Script deletes the logs which are older than 180 days           *
+#*                                                                     *
+#*                                                                     *
+#**********************************************************************
+date1="[$(date +'%m/%d/%y %T')]"
+find /app/espcare/archive/log/* -depth -mtime +180 -exec rm -rf {} \;
+if [ $? -eq 0 ]; then
+echo " " >>ESPCARE_logPurging.log
+echo "**********************************************************************">>ESPCARE_logPurging.log
+echo "$date1:Records deleted Sucessfully">>ESPCARE_logPurging.log
+echo "******************End of Script*********************">>ESPCARE_logPurging.log
+echo " ">>ESPCARE_logPurging.log
+else
+echo " " >>ESPCARE_logPurging.log
+echo "*********************************************************************">>ESPCARE_logPurging.log
+echo "$date1:Error in deleting records -">>ESPCARE_logPurging.log
+find /app/espcare/archive/log/* -depth -mtime +180 >>ESPCARE_logPurging.log
+echo "*******************End of Script******************">>ESPCARE_logPurging.log
+echo " ">>ESPCARE_logPurging.log
+echo "******Error in deleting logs on $date1 by script ESPCARE_logPurging.sh******"|mail -s "ERROR FOR SCRIPT ESPCARE_logPurging.sh" ESPCARE@techmahindra.com
+fi
